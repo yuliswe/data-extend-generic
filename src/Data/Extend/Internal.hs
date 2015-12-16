@@ -1,3 +1,4 @@
+{-# LANGUAGE Safe #-}
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE DefaultSignatures #-}
@@ -36,15 +37,29 @@ instance (GExtend a) => GExtend (M1 i c a) where
 
 
 class Extend a where
+   -- | By default
+   --
+   -- prop>  a `extend` b = a
+   --
+   -- prop> Nothing `extend` Just a = Just a
+   --
+   -- To use the "Extend" class, simply make your data derive Generic.
+   --
+   -- If "a" is a user defined data type, then all "Nothing" fields of "a" are replaced by corresponding fields in "b",
+   --
+   -- ie, all "Just" fields in "a" will override corresponding fields in "b".
    extend :: a -> a -> a
    default extend :: (Generic a, GExtend (Rep a)) => a -> a -> a
    extend a b = to $ gExtend (from a) (from b)
 
 
 instance (Extend a) => Extend (Maybe a) where
+   -- | Nothing `extend` Just b = Just b
+   -- (Just a) `extend` (Just b) = Just a
    extend (Just a) _ = Just a
    extend Nothing  b = b
 
 instance {-# OVERLAPPABLE #-} Extend a where
+   -- | By default a `extend` b is a
    extend a _ = a
 
