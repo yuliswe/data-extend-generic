@@ -29,22 +29,22 @@ main :: IO ()
 main = hspec $
    describe "Data.Extend" $ do
       specify "Int" $
-         (1 `extend` 2) `shouldBe` (2 :: Int)
+         (2 `extend` 1) `shouldBe` (2 :: Int)
       specify "String" $
-         ("a" `extend` "b") `shouldBe` "b"
+         ("b" `extend` "a") `shouldBe` "b"
       specify "data 0" $
          (Test `extend` Test) `shouldBe` Test
       specify "data 1" $
-         (test1A `extend` test2A) `shouldBe` TestA 1 (Just 1) (Just 2)
+         (test2A `extend` test1A) `shouldBe` TestA 1 (Just 1) (Just 2)
       specify "data 2" $
-         (test1B `extend` test2B) `shouldBe` TestB 1 (Just 1) (Just 2)
+         (test2B `extend` test1B) `shouldBe` TestB 1 (Just 1) (Just 2)
       specify "data 3" $
-         (test1A `extend` test2B) `shouldBe` test2B
+         (test2B `extend` test1A) `shouldBe` test2B
       specify "data 4" $
-         (test2B `extend` test1A) `shouldBe` test1A
+         (test1A `extend` test2B) `shouldBe` test1A
       specify "data 5" $
-         (test1B `extend` test2A) `shouldBe` test2A
+         (test2A `extend` test1B) `shouldBe` test2A
       specify "data 6" $
-         (test2A `extend` test1B) `shouldBe` test1B
+         (test1B `extend` test2A) `shouldBe` test1B
 
 

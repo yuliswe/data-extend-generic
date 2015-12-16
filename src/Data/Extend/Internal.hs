@@ -15,8 +15,7 @@ class GExtend a where
 
 
 instance (GExtend (K1 i (m a)), Alternative m, GExtend b) => GExtend (K1 i (m a) :*: b) where
-   gExtend (K1 a1 :*: b1) (K1 a2 :*: b2) = K1 (a2 <|> a1) :*: gExtend b1 b2
-
+   gExtend (K1 a1 :*: b1) (K1 a2 :*: b2) = K1 (a1 <|> a2) :*: gExtend b1 b2
 
 instance GExtend U1 where
    gExtend _ _ = U1
@@ -30,7 +29,7 @@ instance (GExtend a, GExtend b) => GExtend (a :*: b) where
 instance (GExtend a, GExtend b) => GExtend (a :+: b) where
    gExtend (L1 a) (L1 b) = L1 $ gExtend a b
    gExtend (R1 a) (R1 b) = R1 $ gExtend a b
-   gExtend _ b = b
+   gExtend a _ = a
 
 instance (GExtend a) => GExtend (M1 i c a) where
    gExtend (M1 a) (M1 b) = M1 $ gExtend a b
@@ -43,8 +42,9 @@ class Extend a where
 
 
 instance (Extend a) => Extend (Maybe a) where
-   extend _ (Just b) = Just b
-   extend a Nothing  = a
+   extend (Just a) _ = Just a
+   extend Nothing  b = b
 
 instance {-# OVERLAPPABLE #-} Extend a where
-   extend _ b = b
+   extend a _ = a
+
