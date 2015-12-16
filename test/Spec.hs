@@ -16,10 +16,10 @@ data Test = Test | TestA {
    } deriving (Show, Generic, Eq)
 
 test1A = TestA 1 (Just 1) Nothing
-test2A = TestA 1 Nothing (Just 2)
+test2A = TestA 0 Nothing (Just 2)
 
 test1B = TestB 1 (Just 1) Nothing
-test2B = TestB 1 Nothing (Just 2)
+test2B = TestB 0 Nothing (Just 2)
 
 
 
@@ -35,9 +35,9 @@ main = hspec $
       specify "data 0" $
          (Test `extend` Test) `shouldBe` Test
       specify "data 1" $
-         (test2A `extend` test1A) `shouldBe` TestA 1 (Just 1) (Just 2)
+         (test2A `extend` test1A) `shouldBe` TestA 0 (Just 1) (Just 2)
       specify "data 2" $
-         (test2B `extend` test1B) `shouldBe` TestB 1 (Just 1) (Just 2)
+         (test2B `extend` test1B) `shouldBe` TestB 0 (Just 1) (Just 2)
       specify "data 3" $
          (test2B `extend` test1A) `shouldBe` test2B
       specify "data 4" $
